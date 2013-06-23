@@ -5,7 +5,7 @@ import hashlib
 
 
 def get_engine():
-    url = os.environ.get('DATABASE_URL')
+    url = os.environ.get('DATABASE_URL', 'sqlite:///articles.sqlite3')
     return dataset.connect(url)
 
 #DICTIONARIES = '.dicts'
