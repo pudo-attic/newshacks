@@ -10,10 +10,11 @@ import json
 from readability.readability import Document
 from urlparse import urljoin
 from datetime import datetime
+from common import get_engine
 
 from threads import threaded
 
-engine = dataset.connect('postgresql://localhost/fl')
+engine = get_engine()
 table = engine['articles']
 
 
