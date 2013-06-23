@@ -1,0 +1,3 @@
+
+DICTIONARIES = '.dicts'
+
