@@ -21,9 +21,9 @@ def normalize(text):
             continue
         elif cat.startswith('L') or cat.startswith('N'):
             filtered.append(char)
-        #else:
+        else:
         #    print (cat, char)
-        #    filtered.append(char)
+            filtered.append(' ')
     text = u''.join(filtered)
     while '  ' in text:
         text = text.replace('  ', ' ')

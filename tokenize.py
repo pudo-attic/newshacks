@@ -15,8 +15,10 @@ def tokens_to_bigrams(tokens):
 
 
 def make_bigrams(text):
-    tokens = WordPunctTokenizer().tokenize(text)
-    tokens = filter(lambda t: len(t), map(normalize, tokens))
+    #tokens = WordPunctTokenizer().tokenize(text)
+    tokens = normalize(text).split(' ')
+    tokens = [t for t in tokens if len(t)]
+    #tokens = filter(lambda t: len(t), map(normalize, tokens))
     tokens = [t for t in tokens if t not in STOPWORDS]
     bigrams = list(tokens_to_bigrams(tokens))
     return bigrams
