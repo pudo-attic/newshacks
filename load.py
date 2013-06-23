@@ -3,7 +3,7 @@ from guhp import get_articles
 from nltk.tokenize import WordPunctTokenizer
 from freq import tf_idf
 from normalize import normalize
-from common import save_article_dict
+#from common import save_article_dict
 
 STOPWORDS = open('stopwords.txt').read().split()
 #print STOPWORDS
@@ -38,9 +38,9 @@ if __name__ == '__main__':
     for article in get_articles():
         article['bigrams'] = make_bigrams(article.get('text'))
         articles.append(article)
-    print "Making gensim dictionaries..."
-    for article in articles:
-        save_article_dict(article.get('url'), article['bigrams'])
+    #print "Making gensim dictionaries..."
+    #for article in articles:
+    #    save_article_dict(article.get('url'), article['bigrams'])
     print "Generating term frequencies..."
     articles_grams = [a.get('bigrams') for a in articles]
     for article in articles:
