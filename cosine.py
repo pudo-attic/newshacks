@@ -1,8 +1,8 @@
-import json
+import json, re
 from pprint import pprint
 from common import load_article_dict
 from gensim import corpora, models, similarities
-
+from nltk.tokenize import WordPunctTokenizer
 
 def similarity(article, other):
     total = 0
@@ -16,6 +16,9 @@ def make_corpus(dic, texts):
     corpora.MmCorpus.serialize('corpus.mm', corpus)
     #print corpus
     return corpus
+
+def make_tfidf(mm, d):
+    return models.TfidfModel(mm, id2word=d, normalize=True)
 
 
 def similar_articles(articles, dic):
@@ -35,17 +38,24 @@ def similar_articles(articles, dic):
         print "> Best matches:"
         for other, score in scores:
             print "  * %s: %s" % ([other.get('og:title')], score)
+1
 
 
 if __name__ == '__main__':
 
+    word_re = re.compile('[a-z0-9\s]+')
+    stopwords = open('stopwords.txt').read().split('\n')
     with open('articles.json', 'rb') as fh:
         articles = json.load(fh)
         texts = []
+        tokenizer = WordPunctTokenizer()
         for article in articles:
-            text = article.get('bigrams') + [article.get('url')]
-            texts.append(text)
+           texts.append([w
+                         for w in tokenizer.tokenize(article.get('text'))
+                         if re.match(word_re, w) and w not in stopwords])
+
         dic = corpora.Dictionary(texts)
+        dic.save('dictionary.dict')
         corpus = make_corpus(dic, texts)
-        similar_articles(articles, dic)
-        #print len(articles)
+        tfidf = make_tfidf(corpus, dic)
+        corpora.MmCorpus.serialize('tfidf.mm', tfidf[corpus], progress_cnt=100)
