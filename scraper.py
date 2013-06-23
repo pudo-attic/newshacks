@@ -40,15 +40,18 @@ def get_article(d):
         return
     print "fetching stuff for %s" % url
     d['html'] = requests.get(url).content
-    doc = Document(d['html'])
-    d['summary'] = html.fromstring(doc.summary()).xpath('string()')
-    d['content'] = html.fromstring(doc.content()).xpath('string()')
-    d['title'] = doc.title()
+    try:
+        doc = Document(d['html'])
+        d['summary'] = html.fromstring(doc.summary()).xpath('string()')
+        d['content'] = html.fromstring(doc.content()).xpath('string()')
+        d['title'] = doc.title()
+    except Exception, e:
+        print e
     #print d
     #fname = "data/" + uuid.uuid4().hex + ".json"
     table.upsert(d, ['url'])
 
 if __name__ == '__main__':
-    for art in get_sources():
-        get_article(art)
-  #threaded(data, get_article)
+    #for art in get_sources():
+    #    get_article(art)
+    threaded(get_sources(), get_article)
